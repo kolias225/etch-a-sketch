@@ -1,14 +1,19 @@
 let currentMode = 'draw';
 
-document.getElementById('draw').addEventListener('click', () => {
-    currentMode = 'draw';
-});
-document.getElementById('erase').addEventListener('click', () => {
-    currentMode = 'erase';
-});
-document.getElementById('rainbow').addEventListener('click', () => {
-    currentMode = 'rainbow';
-});
+function setMode(mode) {
+    currentMode = mode;
+    updateActiveButton();
+}
+
+function updateActiveButton() {
+    const buttons = document.querySelectorAll('#toolbar button');
+    buttons.forEach(button => button.classList.remove('active'));
+
+    const activeButton = document.getElementById(currentMode);
+    if (activeButton) {
+        activeButton.classList.add('active')
+    }
+}
 
 function createGrid(size) {
     const container = document.getElementById('grid-container');
@@ -46,7 +51,20 @@ function getRandomColor() {
     return `rgb(${r}, ${g}, ${b})`;
 }
 
+document.getElementById('draw').addEventListener('click', () => setMode('draw'));
+document.getElementById('erase').addEventListener('click', () => setMode('erase'));
+document.getElementById('rainbow').addEventListener('click', () => setMode('rainbow'));
+
+document.getElementById('clearAll').addEventListener('click', () => {
+    const squares = document.querySelectorAll('.grid-square');
+    squares.forEach(square => {
+        square.style.backgroundColor = 'white';
+    });
+}); 
+
+
 createGrid(16);
+setMode('draw');
 
 document.getElementById('resize-button').addEventListener('click', () => {
     let size = parseInt(prompt('enter grid size from 1 to 100'), 10);
