@@ -1,9 +1,21 @@
+let currentMode = 'draw';
+
+document.getElementById('draw').addEventListener('click', () => {
+    currentMode = 'draw';
+});
+document.getElementById('erase').addEventListener('click', () => {
+    currentMode = 'erase';
+});
+document.getElementById('rainbow').addEventListener('click', () => {
+    currentMode = 'rainbow';
+});
+
 function createGrid(size) {
     const container = document.getElementById('grid-container');
     container.innerHTML = '';
 
     
-    const squareSize = Math.floor(960 / size);
+    const squareSize = 960 / size;
 
     for (let i = 0; i < size * size; i++) {
         const square = document.createElement('div');
@@ -11,12 +23,27 @@ function createGrid(size) {
         square.style.width = `${squareSize}px`;
         square.style.height = `${squareSize}px`;
 
-        square.addEventListener('mouseenter', () => {
-            square.style.backgroundColor = 'black';
-        });
+
+            square.addEventListener('mouseenter', () => {
+                if (currentMode === 'draw') {
+                    square.style.backgroundColor = 'black';
+                } else if (currentMode === 'erase') {
+                    square.style.backgroundColor = 'white';
+                } else if (currentMode === 'rainbow') {
+                    square.style.backgroundColor = getRandomColor();
+                }
+            });
+        
 
         container.appendChild(square);
     }
+};
+
+function getRandomColor() {
+    const r = Math.floor(Math.random() * 256);
+    const g = Math.floor(Math.random() * 256);
+    const b = Math.floor(Math.random() * 256);
+    return `rgb(${r}, ${g}, ${b})`;
 }
 
 createGrid(16);
